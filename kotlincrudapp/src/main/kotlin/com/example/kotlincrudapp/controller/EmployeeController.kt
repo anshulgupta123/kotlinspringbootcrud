@@ -47,4 +47,10 @@ class EmployeeController {
         log.info("Request for updateEmployee of EmployeeController :{}", employeeId)
         return ResponseEntity(employeeService.deleteEmployee(employeeId), HttpStatus.OK)
     }
+
+    @GetMapping(UrlConstants.GET_ALL_EMPLOYEE_BY_SEARCH)
+    fun getAllEmployeeWithSearching(@RequestParam(defaultValue = "") searchParam: String): ResponseEntity<Any> {
+        log.info("Request for getAllEmployeeWithSearching of EmployeeController :{}", searchParam)
+        return ResponseEntity(employeeService.getAllEmployeesBySerach(searchParam), HttpStatus.OK)
+    }
 }

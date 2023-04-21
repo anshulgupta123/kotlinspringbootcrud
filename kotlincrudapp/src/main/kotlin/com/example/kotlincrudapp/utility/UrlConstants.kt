@@ -7,5 +7,6 @@ class UrlConstants {
         const val GET_EMPLOYEE_BY_ID = "/v1/getEmployeeById"
         const val DELETE_EMPLOYEE = "/v1/deleteEmployee"
         const val Update_EMPLOYEE = "/v1/updateEmployee"
+        const val GET_ALL_EMPLOYEE_BY_SEARCH= "/v1/getAllEmployeeBySearch"
     }
 }

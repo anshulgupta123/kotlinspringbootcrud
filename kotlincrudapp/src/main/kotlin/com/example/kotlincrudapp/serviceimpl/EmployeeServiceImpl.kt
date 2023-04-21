@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 import java.text.MessageFormat
 import java.util.Optional
+
 
 @Service
 class addEmployee : EmployeeService {
@@ -175,6 +177,57 @@ class addEmployee : EmployeeService {
             } else {
                 errorMessage =
                     MessageFormat.format("Exception caught in updateEmployee of EmployeeServiceImpl:{0}", e.message);
+            }
+            log.error(errorMessage);
+            throw EmployeeException(errorMessage!!);
+        }
+    }
+
+    override fun getAllEmployeesBySerach(searchParam: String): Any {
+        log.info("Inside getAllEmployeesBySerach of EmployeeServiceImpl")
+        try {
+            val responseList = mutableListOf<EmployeeDto>()
+            val dataFromRepo: List<Array<Any>> = employeeRepository.findEmployeesBySearchParam(searchParam)
+            for (array in dataFromRepo) {
+                var employeeId: Long = 0;
+                var employeeName = ""
+                var employeeDept = ""
+                var employeeEmail = ""
+                var employeeAddress = ""
+                if (array[0] is BigDecimal) {
+                    var empId = array[0] as BigDecimal
+                    employeeId = empId.longValueExact()
+                }
+                if (array[1] is String) {
+                    employeeAddress = array[1].toString()
+                }
+                if (array[2] is String) {
+                    employeeDept = array[2].toString()
+                }
+                if (array[3] is String) {
+                    employeeEmail = array[3].toString()
+                }
+                if (array[4] is String) {
+                    employeeName = array[4].toString()
+                }
+                responseList.add(EmployeeDto(employeeId, employeeName, employeeEmail, employeeDept, employeeAddress))
+            }
+            return Response(
+                enviroment.getProperty(Constants.EMPLOYEES_FETCHED_SUCCESSFULLY)!!,
+                enviroment.getProperty(Constants.SUCCESS_CODE)!!,
+                responseList
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            var errorMessage: String? = null;
+            if (e is EmployeeException) {
+                errorMessage = e.exceptionMessage;
+            } else {
+                errorMessage =
+                    MessageFormat.format(
+                        "Exception caught in getAllEmployeesBySerach of EmployeeServiceImpl:{0}",
+                        e.message
+                    );
             }
             log.error(errorMessage);
             throw EmployeeException(errorMessage!!);
