@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_kotlinspringbootcrud_1685243747201-push-trigger-input-set
+  identifier: Build_kotlinspringbootcrud_1685243747201pushtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_kotlinspringbootcrud_1685243747201
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
